@@ -18,7 +18,7 @@ HOSTNAME=$(hostname)
 for trans_image_name in ${trans_image_names[@]} ; do
 	echo "[${HOSTNAME}]>>>> Pulling $trans_image_name ..."
 	image_full_name="registry.cn-zhangjiakou.aliyuncs.com/jancco/$trans_image_name:latest"
-	docker pull "$image_full_name" >> /del/null
+	docker pull "$image_full_name" >> /dev/null
 
     IFS='_' image_name_parts=($trans_image_name)
     image_name=${image_name_parts[-1]}
