@@ -10,7 +10,8 @@ trans_image_names=( \
 	k8s.gcr.io_kube-controller-manager-amd64
 	k8s.gcr.io_kube-proxy-amd64
 	k8s.gcr.io_kube-scheduler-amd64
-	k8s.gcr.io_kubernetes-dashboard-amd64)
+	k8s.gcr.io_kubernetes-dashboard-amd64
+	k8s.gcr.io_pause)
 
 for trans_image_name in ${trans_image_names[@]} ; do
 	echo ">>>> Pulling $trans_image_name ..."
