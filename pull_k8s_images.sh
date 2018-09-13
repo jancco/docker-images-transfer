@@ -13,10 +13,12 @@ trans_image_names=( \
 	k8s.gcr.io_kubernetes-dashboard-amd64
 	k8s.gcr.io_pause)
 
+HOSTNAME=$(hostname)
+
 for trans_image_name in ${trans_image_names[@]} ; do
-	echo ">>>> Pulling $trans_image_name ..."
+	echo "[${HOSTNAME}]>>>> Pulling $trans_image_name ..."
 	image_full_name="registry.cn-zhangjiakou.aliyuncs.com/jancco/$trans_image_name:latest"
-	docker pull "$image_full_name"
+	docker pull "$image_full_name" >> /del/null
 
     IFS='_' image_name_parts=($trans_image_name)
     image_name=${image_name_parts[-1]}
@@ -25,7 +27,7 @@ for trans_image_name in ${trans_image_names[@]} ; do
 	image_origin_name=$origin_path/$image_name:$version_tag
 	docker tag "$image_full_name" "$image_origin_name" >> /dev/null
 	docker rmi "$image_full_name" >> /dev/null
-	echo "$image_origin_name updated!"
+	echo "[${HOSTNAME}]<<<< $image_origin_name updated!"
 	echo ""
 done
 
