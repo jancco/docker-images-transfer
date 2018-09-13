@@ -1,18 +1,30 @@
 #!/bin/bash
 
-image_names=(metrics-server-amd64 defaultbackend kube-proxy-amd64 kubernetes-dashboard-amd64 fluentd-elasticsearch
-    elasticsearch coredns kube-scheduler-amd64 kube-apiserver-amd64 kube-controller-manager-amd64)
+trans_image_names=( \
+    gcr.io_google_containers_defaultbackend
+	gcr.io_google_containers_metrics-server-amd64
+	k8s.gcr.io_coredns
+	k8s.gcr.io_elasticsearch
+	k8s.gcr.io_fluentd-elasticsearch
+	k8s.gcr.io_kube-apiserver-amd64
+	k8s.gcr.io_kube-controller-manager-amd64
+	k8s.gcr.io_kube-proxy-amd64
+	k8s.gcr.io_kube-scheduler-amd64
+	k8s.gcr.io_kubernetes-dashboard-amd64)
 
-for image_name in ${image_names[@]} ; do
-	image_full_name=jancco/$image_name:latest
-	echo ">>>> Pulling $image_full_name ..."
-	docker pull $image_full_name
+for trans_image_name in ${trans_image_names[@]} ; do
+	echo ">>>> Pulling $trans_image_name ..."
+	image_full_name="registry.cn-zhangjiakou.aliyuncs.com/jancco/$trans_image_name:latest"
+	docker pull "$image_full_name"
 
-	origin_path=`docker inspect -f "{{index .Config.Labels \"origin-path\"}}" $image_full_name`
-	version_tag=`docker inspect -f "{{index .Config.Labels \"version-tag\"}}" $image_full_name`
-	docker tag $image_full_name $origin_path/$image_name:$version_tag >> /dev/null
-	docker rmi $image_full_name >> /dev/null
-	echo "$image_full_name updated!"
+    IFS='_' image_name_parts=($trans_image_name)
+    image_name=${image_name_parts[-1]}
+	origin_path=`docker inspect -f "{{index .Config.Labels \"origin-path\"}}" "$image_full_name"`
+	version_tag=`docker inspect -f "{{index .Config.Labels \"version-tag\"}}" "$image_full_name"`
+	image_origin_name=$origin_path/$image_name:$version_tag
+	docker tag "$image_full_name" "$image_origin_name" >> /dev/null
+	docker rmi "$image_full_name" >> /dev/null
+	echo "$image_origin_name updated!"
 	echo ""
 done
 
