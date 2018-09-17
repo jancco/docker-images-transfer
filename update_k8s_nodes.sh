@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 : ${K8S_MASTER_NODES:="k8s-m1 k8s-m2 k8s-m3"}
 : ${K8S_WORKER_NODES:="k8s-g1 k8s-g2"}
