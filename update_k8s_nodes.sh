@@ -11,9 +11,9 @@ echo "To update nodes: ${K8S_NODES} ..."
 # Update all nodes
 for NODE in ${K8S_NODES}; do
   # Copy script file
-  scp pull_k8s_images.sh ${NODE}:${SCRIPT_DIR}/ >> /dev/null
+  scp pull_images.sh ${NODE}:${SCRIPT_DIR}/ >> /dev/null
   # Update kuberneter images and clean incomplete ones
-  ssh ${NODE} ". ${SCRIPT_DIR}/pull_k8s_images.sh && docker images | grep '<none>' | awk '{print \$3}' | xargs -r docker rmi >> /dev/null" &
+  ssh ${NODE} ". ${SCRIPT_DIR}/pull_images.sh -g k8s -s -c" &
 done
 
 echo "All nodes updated!"
